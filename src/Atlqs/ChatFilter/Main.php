@@ -46,11 +46,10 @@ public function onChat(PlayerChatEvent $event) {
                     $length = strlen($message) - 1;
                     for ($i = 0; $i < $length; $i++) {
                         $randomString .= $characters[rand(0, $charactersLength - 1)];
-                        $randomString = C::YELLOW . $randomString;
                     }
                     $event->setCancelled();
-                    $event->getPlayer()->sendMessage(C::RED . "- The chat filter has disabled one of the words you've tried to say.");
-                    $event->getPlayer()->sendMessage(C::RED . "- The highlighted word is blocked: " . C::BLUE . str_replace("$words", "$randomString", "$message"));
+                    $event->getPlayer()->sendMessage(C::RED . "- The chat filter has blocked one of the words you've tried to say.");
+                    $event->getPlayer()->sendMessage(C::AQUA . "- The highlighted word(s) in yellow is/are blocked: " . str_replace("$words", C::YELLOW . "$randomString" . C::RESET, "$message"));
                 }
             }
         }
