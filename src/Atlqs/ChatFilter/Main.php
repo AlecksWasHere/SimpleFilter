@@ -10,10 +10,8 @@ use pocketmine\event\player\PlayerChatEvent;
 use pocketmine\utils\TextFormat as C;
 
 class Main extends PluginBase implements Listener{
-
     private Config $mainConfig;
     private $chatCooldown;
-
     public function onEnable () : void{
         $this->getServer()->getPluginManager()->registerEvents($this, $this);
         @mkdir($this->getDataFolder());
@@ -23,7 +21,6 @@ class Main extends PluginBase implements Listener{
 
 
 public function onChat(PlayerChatEvent $event) {
-
         $cooldown = $this->mainConfig->get('cooldown');
         if(!$cooldown) $cooldown = 2;
         $player = $event->getPlayer();
@@ -31,7 +28,6 @@ public function onChat(PlayerChatEvent $event) {
             ($this->chatCooldown[$player->getName()]) and time() - $this->chatCooldown[$player->getName()];
             $event->setCancelled();
             $player->sendMessage(C::RED . "- Slow down! You are sending many messages too quickly." . C::BLUE . " Cooldown: $cooldown(s).");
-
         } else {
             $this->chatCooldown[$player->getName()] = time();
             $message = $event->getMessage();
@@ -39,7 +35,6 @@ public function onChat(PlayerChatEvent $event) {
             foreach($wordsArray as $words) {
                 $search = strpos($message, $words);
                 if($search !== false) {
-
                     $characters = '#$&*!';
                     $charactersLength = strlen($characters);
                     $randomString = "";
