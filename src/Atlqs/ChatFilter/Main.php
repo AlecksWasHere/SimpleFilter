@@ -43,9 +43,9 @@ public function onChat(PlayerChatEvent $event) {
                     $characters = '#$&*!';
                     $charactersLength = strlen($words);
                     $randomString = "";
-                    $length = strlen($message) - 1;
+                    $length = strlen($message);
                     for ($i = 0; $i < $length; $i++) {
-                        $randomString .= $characters[rand(0, $charactersLength - 1)];
+                        $randomString .= $characters[rand(0, $charactersLength)];
                     }
                     $event->setCancelled();
                     $event->getPlayer()->sendMessage(C::RED . "- The chat filter has blocked one of the words you've tried to say.");
