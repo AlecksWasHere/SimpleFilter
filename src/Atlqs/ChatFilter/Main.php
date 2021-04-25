@@ -17,13 +17,15 @@ class Main extends PluginBase implements Listener{
     public function onEnable () : void{
         $this->getServer()->getPluginManager()->registerEvents($this, $this);
         @mkdir($this->getDataFolder());
-        $this->saveResource("config.yaml", true);
         $this->mainConfig = new Config($this->getDataFolder() . "config.yaml", 2);
+        $this->saveResource("config.yaml");
     }
 
 
 public function onChat(PlayerChatEvent $event) {
-        $cooldown = 2;
+
+        $cooldown = $this->mainConfig->get('cooldown');
+        if(!$cooldown) $cooldown = 2;
         $player = $event->getPlayer();
         if(isset($this->chatCooldown[$player->getName()]) and time() - $this->chatCooldown[$player->getName()] < $cooldown) {
             ($this->chatCooldown[$player->getName()]) and time() - $this->chatCooldown[$player->getName()];
@@ -37,11 +39,20 @@ public function onChat(PlayerChatEvent $event) {
             foreach($wordsArray as $words) {
                 $search = strpos($message, $words);
                 if($search !== false) {
+
+                    $characters = '#$&*!';
+                    $charactersLength = strlen($characters);
+                    $randomString = "";
+                    $length = strlen($message) - 1;
+                    for ($i = 0; $i < $length; $i++) {
+                        $randomString .= $characters[rand(0, $charactersLength - 1)];
+                        $randomString = C::YELLOW . $randomString;
+                    }
                     $event->setCancelled();
                     $event->getPlayer()->sendMessage(C::RED . "- The chat filter has disabled one of the words you've tried to say.");
+                    $event->getPlayer()->sendMessage(C::RED . "- The highlighted word is blocked: " . C::BLUE . str_replace("$words", "$randomString", "$message"));
                 }
             }
         }
     }
 }
-?>
